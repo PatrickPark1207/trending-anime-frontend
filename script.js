@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('http://127.0.0.1:5000/api/trending')
+    fetch('https://trending-anime-backend.onrender.com/api/trending')
         .then(response => response.json())
         .then(data => {
             const top3Row = document.getElementById('top3-row');
