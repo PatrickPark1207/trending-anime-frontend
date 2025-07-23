@@ -2,10 +2,32 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('https://trending-anime-backend.onrender.com/api/trending')
         .then(response => response.json())
         .then(data => {
+            // 날짜 정보 업데이트
+            const updateDateElement = document.getElementById('update-date');
+            const descriptionElement = document.getElementById('description');
+            
+            if (data.lastUpdated) {
+                const updateDate = data.lastUpdated;
+                updateDateElement.textContent = `Most Popular Anime Series – Updated: ${updateDate}`;
+                descriptionElement.innerHTML = `Welcome to the ultimate <strong>Top 20 Trending Anime</strong> list! Discover the most popular anime series, <strong>updated every day</strong> (last update: ${updateDate}) based on real-time trends from AniList. Find your next favorite anime and see what's hot in the anime world right now.`;
+                
+                // 메타 태그들도 동적으로 업데이트
+                document.title = `Top 20 Trending Anime | Most Popular Anime List (Updated: ${updateDate})`;
+                document.querySelector('meta[name="description"]').setAttribute('content', `Discover the Top 20 Trending Anime! Updated daily (${updateDate}) with the most popular anime series worldwide. Find your next favorite anime here.`);
+                document.querySelector('meta[property="og:title"]').setAttribute('content', `Top 20 Trending Anime | Most Popular Anime List (Updated: ${updateDate})`);
+                document.querySelector('meta[property="og:description"]').setAttribute('content', `Discover the Top 20 Trending Anime! Updated daily (${updateDate}) with the most popular anime series worldwide.`);
+                document.querySelector('meta[name="twitter:title"]').setAttribute('content', `Top 20 Trending Anime | Most Popular Anime List (Updated: ${updateDate})`);
+                document.querySelector('meta[name="twitter:description"]').setAttribute('content', `Discover the Top 20 Trending Anime! Updated daily (${updateDate}) with the most popular anime series worldwide.`);
+            }
+            
             const top3Row = document.getElementById('top3-row');
             const restRow = document.getElementById('rest-row');
+            
+            // anime 배열에서 데이터 추출
+            const animeData = data.anime || data;
+            
             // 1~3등
-            data.slice(0, 3).forEach((anime, idx) => {
+            animeData.slice(0, 3).forEach((anime, idx) => {
                 const card = document.createElement('div');
                 card.classList.add('anime-card');
                 card.style.width = '220px';
@@ -83,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 top3Row.appendChild(card);
             });
             // 4~20등
-            data.slice(3).forEach(anime => {
+            animeData.slice(3).forEach(anime => {
                 const card = document.createElement('div');
                 card.classList.add('anime-card');
                 card.style.width = '140px';
